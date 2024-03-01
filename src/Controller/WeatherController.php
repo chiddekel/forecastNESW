@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WeatherController
+
+class WeatherController extends AbstractController
 {
 
     #[Route('/weather/highlander-says')]
@@ -15,8 +17,8 @@ class WeatherController
     {
         $draw = random_int(0, 100);
         $forecast = $draw < 50 ? "It's going to rain" : "It's going to be sunny";
-        return new Response(
-            "<html><body> $forecast </body></html>"
-        );
+        return $this->render('weather/highlander-says.html.twig', [
+            'forecast' => $forecast,
+        ]);
     }
 }
