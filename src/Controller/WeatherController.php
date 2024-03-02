@@ -16,7 +16,7 @@ class WeatherController extends AbstractController
     public function highlanderSays(): Response
     {
         $draw = random_int(0, 100);
-        $forecast = $draw < 50 ? "It's going to rain" : "It's going to be sunny";
+        $forecast = $draw < 50 ? "It's going to rain :-) " : "It's going to be sunny ;-)";
         return $this->render('weather/highlander-says.html.twig', [
             'forecast' => $forecast,
         ]);
