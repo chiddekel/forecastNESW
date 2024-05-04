@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class WeatherController extends AbstractController
 {
 
-    // #[Route('/weather/highlander-says', name: 'custom_weather')]
+    // #[Route('/weather/highlander-says', name: 'custom_weather', methods: ['GET'])]
 
     public function highlanderSays(): Response
     {
