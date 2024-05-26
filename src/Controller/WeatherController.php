@@ -13,10 +13,10 @@ class WeatherController extends AbstractController
 
     // #[Route('/weather/highlander-says', name: 'custom_weather', methods: ['GET'])]
 
-    public function highlanderSays(): Response
+    public function highlanderSays(int $threshold): Response
     {
         $draw = random_int(0, 100);
-        $forecast = $draw < 50 ? "It's going to rain :-) " : "It's going to be sunny ;-)";
+        $forecast = $draw < $threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
         return $this->render('weather/highlander-says.html.twig', [
             'forecast' => $forecast,
         ]);
