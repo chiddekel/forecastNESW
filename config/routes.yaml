@@ -9,3 +9,13 @@ weather:
     resource: 'routes/weather.yaml'
     prefix: '/weather'
     name_prefix: 'weather_'
+
+
+home:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults: 
+        route: weather_highlander_says
+        permanents: false
+        threshold: 42
+        # path: https://google.com
