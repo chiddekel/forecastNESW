@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
 
-    // #[Route('/')] renabled and rember of premanet to not set to true or disable cache memory
+    #[Route('/')] #renabled and rember of premanet to not set to true or disable cache memory
 
     public function main(): Response
     {

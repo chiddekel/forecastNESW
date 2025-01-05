@@ -5,10 +5,10 @@ controllers:
     type: attribute
 
 
-weather: 
-    resource: 'routes/weather.yaml'
-    prefix: '/weather'
-    name_prefix: 'weather_'
+# weather: 
+#     resource: 'routes/weather.yaml'
+#     prefix: '/weather'
+#     name_prefix: 'weather_'
 
 
 home:
