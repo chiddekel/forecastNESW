@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 
 
 
@@ -20,7 +22,8 @@ class WeatherController extends AbstractController
         $draw = random_int(0, 100);
         $forecast = $draw < $threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
         $json = [
-            'forecast' => $forecast
+            'forecast' => $forecast,
+            'self' => $this->generateUrl('app_weather_highlandersaysapi', ['threshold' => $threshold], UrlGeneratorInterface::ABSOLUTE_URL),
         ];
         return new JsonResponse($json);
     }
