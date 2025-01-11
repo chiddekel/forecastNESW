@@ -10,7 +10,8 @@ highlander_says_guess:
     path: /highlander-says/{guess}
     controller: App\Controller\WeatherController::highlanderSaysGuess
 
-
-    # router working top to bottom - order count.
+# forecast:
+#     path: /{country_code<ES|FR|DE>}/{city_name<Barcelona|Paris|Berlin>}
+#     controller: App\Controller\WeatherController::forecast
 
 
