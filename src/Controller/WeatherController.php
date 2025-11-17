@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -27,7 +28,7 @@ class WeatherController extends AbstractController
     }
 
     #[Route('/highlander-says/{threshold<\d+>?50}', host: 'api.localhost')]
-    public function highlanderSaysApi(int $threshold): Response
+    public function highlanderSaysApi(int $threshold, Request $request): Response
     {
         $draw = random_int(0, 100);
         $forecast = $draw < $threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
@@ -39,12 +40,22 @@ class WeatherController extends AbstractController
     }
 
     #[Route('/highlander-says/{threshold<\d+>?50}')]
-    public function highlanderSays(int $threshold): Response
+    public function highlanderSays(int $threshold, Request $request): Response
     {
+        $trials=$request->query->get('trials', default:1);
+
+        $forecasts = [];
+
+        for ($i = 0; $i < $trials; $i++) {
+
         $draw = random_int(0, 100);
         $forecast = $draw < $threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
+        $forecasts[]=$forecast;
+    
+    }
+        
         return $this->render('weather/highlander-says.html.twig', [
-            'forecast' => $forecast,
+            'forecasts' => $forecasts,
         ]);
     }
 
@@ -64,7 +75,7 @@ class WeatherController extends AbstractController
         $forecast = "It's going to $guess :-)"
         ;
         return $this->render('weather/highlander-says.html.twig', [
-            'forecast' => $forecast,
+            'forecasts' => [$forecast],
         ]);
     }
 

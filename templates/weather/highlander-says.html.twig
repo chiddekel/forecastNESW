@@ -2,12 +2,14 @@
 
 {% block body %}
 
-	<h1>
-		Higlander Says
-	</h1>
+<h1>
+	Higlander Says
+</h1>
+
+{% for forecast in forecasts %}
 	<p>
 		{{ forecast }}</p>
-
+{% endfor %}
 	<nav>
 		<a href="{{ path('app_weather_highlandersays', {threshold: 11})}}">Again! - Try</a>
 	</nav>
@@ -18,9 +20,9 @@
 }}
 
 	<script>
-    const route = "{{  url('app_weather_highlandersays')|escape('js')}}";
-    console.log(route);
-    </script>
+		const route = "{{ url('app_weather_highlandersays')|escape('js') }}";
+console.log(route);
+	</script>
 {% endblock %}
 {% block title %}Highlander Says
 {% endblock %}
