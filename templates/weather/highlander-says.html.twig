@@ -2,17 +2,26 @@
 
 {% block body %}
 
-<h1>
-	Higlander Says
-</h1>
+<div class="container mx-auto px-4 py-8">
+	<h1 class="text-4xl font-bold text-center mb-8 text-blue-600">
+		Highlander Says
+	</h1>
 
-{% for forecast in forecasts %}
-	<p>
-		{{ forecast }}</p>
-{% endfor %}
-	<nav>
-		<a href="{{ path('app_weather_highlandersays', {threshold: 11})}}">Again! - Try</a>
-	</nav>
+	<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
+		{% for forecast in forecasts %}
+			<p class="text-lg mb-4 p-4 bg-blue-50 rounded border-l-4 border-blue-500">
+				{{ forecast }}
+			</p>
+		{% endfor %}
+		
+		<nav class="mt-6 text-center">
+			<a href="{{ path('app_weather_highlandersays', {threshold: 11})}}" 
+			   class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-95">
+				Again! - Try
+			</a>
+		</nav>
+	</div>
+</div>
 {% endblock %}
 {% block javascripts %}
 	{{
