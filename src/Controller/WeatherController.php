@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Model\HighlanderApiDTO;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -29,15 +31,31 @@ class WeatherController extends AbstractController
     }
 
     #[Route('/highlander-says/api')]
-    public function highlanderSaysApi(#[MapQueryParameter] int $threshold, Request $request): Response
+    public function highlanderSaysApi(
+        #[MapQueryString] HighlanderApiDTO $dto = null):Response
     {
+        
+        if ($dto === null){
+            $dto = new HighlanderApiDTO();
+            $dto->threshold = 50;
+            $dto->trials = 1;
+        }
+
+        for ($i = 0; $i < $dto -> trials; $i++) {
+
         $draw = random_int(0, 100);
-        $forecast = $draw < $threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
+        $forecast = $draw < $dto ->threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
+        $forecasts[]=$forecast;
+    
+    }
+        
+        
         $json = [
-            'forecast' => $forecast,
-            'threshold' => $threshold,
-            'self' => $this->generateUrl('app_weather_highlandersaysapi', ['threshold' => $threshold], UrlGeneratorInterface::ABSOLUTE_URL),
+            'forecasts' => $forecasts,
+            'threshold' => $dto -> threshold,
+            'self' => $this->generateUrl('app_weather_highlandersaysapi', ['threshold' => $dto->threshold], UrlGeneratorInterface::ABSOLUTE_URL),
         ];
+        
         return new JsonResponse($json);
     }
 
