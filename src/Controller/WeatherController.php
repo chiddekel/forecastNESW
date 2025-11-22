@@ -8,6 +8,7 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,7 +33,7 @@ class WeatherController extends AbstractController
 
     #[Route('/highlander-says/api')]
     public function highlanderSaysApi(
-        #[MapQueryString] HighlanderApiDTO $dto = null):Response
+        #[MapRequestPayload] ? HighlanderApiDTO $dto = null):Response
     {
         
         if ($dto === null){
