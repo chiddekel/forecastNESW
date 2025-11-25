@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -33,68 +35,77 @@ class WeatherController extends AbstractController
 
     #[Route('/highlander-says/api')]
     public function highlanderSaysApi(
-        #[MapRequestPayload] ? HighlanderApiDTO $dto = null):Response
-    {
-        
-        if ($dto === null){
+        #[MapRequestPayload] ?HighlanderApiDTO $dto = null
+    ): Response {
+
+        if ($dto === null) {
             $dto = new HighlanderApiDTO();
             $dto->threshold = 50;
             $dto->trials = 1;
         }
 
-        for ($i = 0; $i < $dto -> trials; $i++) {
+        for ($i = 0; $i < $dto->trials; $i++) {
 
-        $draw = random_int(0, 100);
-        $forecast = $draw < $dto ->threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
-        $forecasts[]=$forecast;
-    
-    }
-        
-        
+            $draw = random_int(0, 100);
+            $forecast = $draw < $dto->threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
+            $forecasts[] = $forecast;
+        }
+
+
         $json = [
             'forecasts' => $forecasts,
-            'threshold' => $dto -> threshold,
+            'threshold' => $dto->threshold,
             'self' => $this->generateUrl('app_weather_highlandersaysapi', ['threshold' => $dto->threshold], UrlGeneratorInterface::ABSOLUTE_URL),
         ];
-        
+
         return new JsonResponse($json);
     }
 
-    #[Route('/highlander-says/{threshold<\d+>?50}')]
-    public function highlanderSays(int $threshold, Request $request): Response
-    {
-        $trials=$request->query->get('trials', default:1);
+    #[Route('/highlander-says/{threshold<\d+>}')]
+    public function highlanderSays(
+        Request $request,
+        RequestStack $requestStack,
+        ?int $threshold = null,
+    ): Response {
+        $session = $requestStack->getSession();
+
+        if ($threshold) {
+            $session->set('threshold', $threshold);
+        } else {
+            $threshold = $session->get('threshold', 50);
+        }
+        $trials = $request->query->get('trials', 1);
 
         $forecasts = [];
 
         for ($i = 0; $i < $trials; $i++) {
 
-        $draw = random_int(0, 100);
-        $forecast = $draw < $threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
-        $forecasts[]=$forecast;
-    
-    }
-        
+            $draw = random_int(0, 100);
+            $forecast = $draw < $threshold ? "It's going to rain :-) " : "It's going to be sunny ;-)";
+            $forecasts[] = $forecast;
+        }
+
         return $this->render('weather/highlander-says.html.twig', [
             'forecasts' => $forecasts,
+            'threshold' => $threshold,
         ]);
     }
 
     #[Route('/highlander-says/{guess}')]
-    public function highlanderSaysGuess(string $guess): Response    {
-       
-        $availableGuess = ['snow', 'rain', 'hail'];
-        
+    public function highlanderSaysGuess(string $guess): Response
+    {
 
-        if (!in_array($guess,$availableGuess)) {
+        $availableGuess = ['snow', 'rain', 'hail'];
+
+
+        if (!in_array($guess, $availableGuess)) {
             throw $this->createNotFoundException('This guest is not found');
             // throw new NotFoundHttpException('This guest is not found (manually)');
             // throw new BadRequestHttpException("Bad request");
             // throw new Exception('Bad exception');
         }
 
-        $forecast = "It's going to $guess :-)"
-        ;
+        $forecast = "It's going to $guess :-)";
         return $this->render('weather/highlander-says.html.twig', [
             'forecasts' => [$forecast],
         ]);
@@ -137,5 +148,4 @@ class WeatherController extends AbstractController
             'city_name' => $city_name,
         ]);
     }
-
 }
