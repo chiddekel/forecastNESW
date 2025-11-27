@@ -8,6 +8,15 @@
 		</h1>
 
 		<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
+
+
+			{% for message in app.flashes('info')%}
+				<div class="text-lg mb-4 p-4 bg-green-50 rounded border-l-4 border-green-500">
+					Info:
+					{{ message }}
+				</div>
+			{% endfor %}
+
 			{% for forecast in forecasts %}
 				<p class="text-lg mb-4 p-4 bg-blue-50 rounded border-l-4 border-blue-500">
 					{{ forecast }}
