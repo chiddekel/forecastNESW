@@ -1,10 +1,10 @@
 ### GET request from highlander 
 
-POST http://localhost:8000/weather/highlander-says/api
-Content-Type: application/json
-ACCEPT: application/json
+### POST http://localhost:8000/weather/highlander-says/api
+### Content-Type: application/json
+### ACCEPT: application/json
 
-{
-    "threshold": 50,
-    "trials": 10
-}
+### {
+###    "threshold": 50,
+###    "trials": 10
+### }

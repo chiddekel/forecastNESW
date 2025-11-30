@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 #[Route('/weather')]
@@ -35,7 +35,7 @@ class WeatherController extends AbstractController
 
     #[Route('/highlander-says/api')]
     public function highlanderSaysApi(
-        #[MapRequestPayload] ?HighlanderApiDTO $dto = null
+        #[MapQueryString] ?HighlanderApiDTO $dto = null
     ): Response {
 
         if ($dto === null) {
@@ -59,6 +59,14 @@ class WeatherController extends AbstractController
         ];
 
         return new JsonResponse($json);
+        return $this->json($json);
+
+        // return $this->file(
+        //     __DIR__ . '/ideaspot-tv.png',
+        //     'logo.png',
+        //     ResponseHeaderBag::DISPOSITION_INLINE
+        // );
+
     }
 
     #[Route('/highlander-says/{threshold<\d+>}')]
