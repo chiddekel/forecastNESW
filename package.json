@@ -8,7 +8,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "tailwindcss -i ./assets/styles/app.css -o ./assets/styles/output.css --watch"
+    "dev": "tailwindcss -i ./assets/styles/app.css -o ./assets/styles/output.css --watch",
+    "dev:copy": "npm run dev && cp assets/styles/output.css public/styles/output.css",
+    "build": "tailwindcss -i ./assets/styles/app.css -o ./assets/styles/output.css --minify && cp assets/styles/output.css public/styles/output.css",
+    "build:prod": "npm run build && php bin/console asset-map:compile --env=prod",
+    "watch": "npm run dev"
   },
   "repository": {
     "type": "git",

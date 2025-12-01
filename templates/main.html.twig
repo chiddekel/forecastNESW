@@ -1,44 +1,392 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Witamy w systemie Any Weather{% endblock %}
+
 {% block body %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+	{# Hero Section #}
+	<div class="container mx-auto px-4 py-16">
+		<div class="text-center mb-16">
+			<div class="text-7xl mb-6 animate-bounce">🌤️</div>
+			<h1 class="text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent inline-block leading-relaxed py-8 px-8">
+				Witamy w systemie Any Weather
+			</h1>
+			<p class="text-xl text-gray-600 mb-8 px-4">
+				Twoja brama do prawdziwych danych pogodowych z całego świata
+			</p>
 
-<div class="container mx-auto px-4 py-8">
-	<header class="text-center mb-12">
-		<h1 class="text-5xl font-bold text-gray-800 mb-4">
-			Weather Forecast System
-		</h1>
-		<div class="w-24 h-1 bg-blue-500 mx-auto"></div>
-	</header>
+			{# Smart Search Form with Autocomplete #}
+			<div class="max-w-2xl mx-auto mb-8">
+				<form id="weatherSearchForm" class="bg-white rounded-2xl shadow-2xl p-6">
+					<h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">🔍 Wyszukaj miasto</h3>
+					<div class="flex flex-col md:flex-row gap-4">
+						<div class="flex-1">
+							<label class="block text-sm font-semibold text-gray-700 mb-2">Kod kraju (auto)</label>
+							<input type="text" 
+								   id="countryCode" 
+								   name="country_code" 
+								   maxlength="2" 
+								   placeholder="PL" 
+								   value="PL"
+								   readonly
+								   class="w-full px-4 py-3 border-2 border-blue-300 bg-blue-50 rounded-lg text-lg font-bold uppercase text-center cursor-not-allowed"
+								   required>
+							<p class="text-xs text-blue-600 mt-1 text-center">✨ Auto-wypełniane</p>
+						</div>
+						<div class="flex-1 md:flex-grow-3 relative">
+							<label class="block text-sm font-semibold text-gray-700 mb-2">Nazwa miasta</label>
+							<input type="text" 
+								   id="cityName" 
+								   name="city_name" 
+								   placeholder="Wpisz miasto..." 
+								   autocomplete="off"
+								   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none text-lg"
+								   required>
+							{# Autocomplete dropdown #}
+							<div id="autocompleteResults" 
+								 class="hidden absolute z-50 w-full mt-1 bg-white border-2 border-gray-300 rounded-lg shadow-2xl max-h-64 overflow-y-auto">
+							</div>
+							<p class="text-xs text-gray-500 mt-1">💡 Zacznij pisać, a kod kraju zostanie automatycznie uzupełniony</p>
+						</div>
+					</div>
+					<button type="submit" 
+							class="w-full mt-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-4 rounded-xl text-xl font-bold hover:from-blue-600 hover:to-indigo-700 transform transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl">
+						🌤️ Sprawdź pogodę
+					</button>
+				</form>
+			</div>
 
-	<main class="max-w-4xl mx-auto">
-		<div class="bg-white rounded-xl shadow-xl p-8 space-y-6">
-			<p class="text-gray-700 leading-relaxed text-lg">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id ultrices tortor. Curabitur arcu dolor, sollicitudin et hendrerit vel, vehicula non ligula. Aliquam euismod ultricies odio, eget ultricies lectus consequat vel. Etiam sagittis neque dictum molestie lobortis. Aliquam sit amet vehicula diam, non laoreet dolor. Etiam ut diam nec neque tincidunt feugiat. Nam at lacus nec leo lobortis imperdiet vel id mauris. Proin et lectus leo. Aenean sit amet magna auctor, venenatis risus sit amet, ornare tellus. Suspendisse sit amet porttitor dui. Duis vestibulum a enim nec lacinia. Mauris non purus dui. Phasellus in pellentesque ipsum, in scelerisque risus. Vestibulum a diam id enim porta gravida. Sed fringilla id urna sed cursus.
-			</p>
-			
-			<div class="border-l-4 border-blue-500 pl-6 py-2 bg-blue-50">
-				<p class="text-gray-700 leading-relaxed text-lg">
-					Sed varius tristique dui vitae vestibulum. Proin scelerisque hendrerit pharetra. In sit amet augue libero. In sit amet efficitur erat, quis cursus diam. Curabitur sit amet nisi feugiat, cursus orci id, posuere ipsum. Aenean imperdiet condimentum vehicula. Praesent finibus maximus blandit. Morbi eleifend ut purus eleifend finibus. Curabitur pretium vulputate aliquet. Pellentesque dictum, urna in maximus vehicula, diam eros laoreet tellus, quis consequat tellus turpis non tellus.
-				</p>
-			</div>
-			
-			<p class="text-gray-700 leading-relaxed text-lg">
-				Proin magna lectus, commodo et posuere non, imperdiet ac nisl. Integer ut nisi nisl. Integer diam augue, laoreet vitae sem sed, dignissim sodales velit. Integer ac venenatis nibh. Nunc felis dui, egestas a commodo vitae, varius id odio. Praesent faucibus ac nulla in ornare. Donec id erat metus. Donec dignissim arcu risus, congue commodo ante porttitor vel.
-			</p>
-			
-			<div class="bg-gray-50 rounded-lg p-6">
-				<p class="text-gray-700 leading-relaxed text-lg">
-					Fusce porta consequat magna, eu congue nisi cursus at. Vivamus ac ante pharetra, euismod magna eget, porttitor mauris. Phasellus id eros quis velit tincidunt mollis. Nam et lacus a justo auctor tincidunt ut a nulla. Proin volutpat sodales urna. Nunc vel urna et ex maximus cursus. Fusce leo erat, tincidunt sed eleifend sed, efficitur in ligula. Nulla lacinia mi a lorem porttitor eleifend. Duis ex risus, interdum non odio sed, imperdiet interdum erat. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-				</p>
-			</div>
-			
-			<p class="text-gray-700 leading-relaxed text-lg font-medium">
-				Mauris interdum arcu at scelerisque vulputate. Sed hendrerit pulvinar enim quis ultrices. Aliquam dignissim nulla sit amet velit consectetur sodales. Etiam viverra ut augue vitae vestibulum. Mauris ut quam eu odio dictum posuere ut ut massa. Nullam auctor massa arcu. Nulla facilisi. Vestibulum maximus gravida eros et condimentum. Suspendisse potenti. Morbi eget sagittis elit. Aliquam hendrerit elementum sagittis.
-			</p>
+			<script>
+				let searchTimeout;
+				const cityInput = document.getElementById('cityName');
+				const countryCodeInput = document.getElementById('countryCode');
+				const autocompleteResults = document.getElementById('autocompleteResults');
+
+				// Smart city search with autocomplete
+				cityInput.addEventListener('input', function() {
+					clearTimeout(searchTimeout);
+					const query = this.value.trim();
+					
+					if (query.length < 2) {
+						autocompleteResults.classList.add('hidden');
+						return;
+					}
+
+					searchTimeout = setTimeout(async () => {
+						try {
+							// Dual search: Polish priority + Global
+							const [polishResults, globalResults] = await Promise.all([
+								// 1. Search with Poland priority
+								fetch(
+									`https://nominatim.openstreetmap.org/search?` +
+									`q=${encodeURIComponent(query + ' Poland')}&format=json&limit=5&addressdetails=1&accept-language=pl`
+								).then(r => r.json()),
+								// 2. Global search
+								fetch(
+									`https://nominatim.openstreetmap.org/search?` +
+									`q=${encodeURIComponent(query)}&format=json&limit=10&addressdetails=1&accept-language=pl`
+								).then(r => r.json())
+							]);
+							
+							// Merge results: Polish first, then global (remove duplicates)
+							const mergedResults = [...polishResults];
+							const existingIds = new Set(polishResults.map(r => r.place_id));
+							
+							for (const result of globalResults) {
+								if (!existingIds.has(result.place_id)) {
+									mergedResults.push(result);
+									existingIds.add(result.place_id);
+								}
+							}
+							
+							// Prioritize Polish results at the top
+							const sortedResults = mergedResults.sort((a, b) => {
+								const aIsPoland = a.address?.country_code?.toLowerCase() === 'pl';
+								const bIsPoland = b.address?.country_code?.toLowerCase() === 'pl';
+								if (aIsPoland && !bIsPoland) return -1;
+								if (!aIsPoland && bIsPoland) return 1;
+								return 0;
+							});
+							
+							if (sortedResults.length > 0) {
+								showAutocomplete(sortedResults.slice(0, 10)); // Max 10 results
+							} else {
+								autocompleteResults.classList.add('hidden');
+							}
+						} catch (error) {
+							console.error('Search error:', error);
+						}
+					}, 700); // Debounce 700ms
+				});
+
+				function showAutocomplete(results) {
+					autocompleteResults.innerHTML = '';
+					autocompleteResults.classList.remove('hidden');
+					
+					results.forEach(result => {
+						const div = document.createElement('div');
+						div.className = 'px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 transition-colors';
+						
+						const address = result.address || {};
+						const addressType = result.addresstype || result.type || '';
+						const countryCode = (address.country_code || 'XX').toUpperCase();
+						
+						// Smart city extraction - show parent city for non-city types
+						let displayCity = result.name;
+						let actualCity = result.name;
+						let subtitle = '';
+						
+						// For offices, buildings, streets, districts - show parent city
+						if (['office', 'building', 'road', 'neighbourhood', 'suburb', 'quarter'].includes(addressType)) {
+							const parentCity = address.city || address.town || address.village;
+							if (parentCity && parentCity !== result.name) {
+								actualCity = parentCity;
+								displayCity = `${parentCity} (${result.name})`;
+								subtitle = `${result.name} → ${parentCity}`;
+							}
+						} 
+						// For city districts
+						else if (addressType === 'city_district') {
+							const parentCity = address.city || address.town;
+							if (parentCity) {
+								actualCity = parentCity;
+								displayCity = `${parentCity} (${result.name})`;
+								subtitle = `Dzielnica w ${parentCity}`;
+							}
+						}
+						// For states/provinces - show capital
+						else if (addressType === 'state') {
+							const capitals = {
+								'województwo wielkopolskie': 'Poznań',
+								'województwo mazowieckie': 'Warszawa',
+								'województwo małopolskie': 'Kraków',
+								'województwo pomorskie': 'Gdańsk',
+								'województwo dolnośląskie': 'Wrocław',
+							};
+							const stateName = result.name?.toLowerCase();
+							if (capitals[stateName]) {
+								actualCity = capitals[stateName];
+								displayCity = `${capitals[stateName]} (${result.name})`;
+								subtitle = `Stolica województwa`;
+							}
+						}
+						// Regular city/town/village
+						else {
+							actualCity = address.city || address.town || address.village || result.name;
+							displayCity = actualCity;
+							subtitle = result.display_name || displayCity;
+						}
+						
+						const icon = addressType === 'office' ? '🏢' : 
+									addressType === 'city_district' ? '🏘️' : 
+									addressType === 'neighbourhood' ? '🏘️' :
+									addressType === 'road' ? '🛣️' :
+									addressType === 'state' ? '🗺️' : '🏙️';
+						
+						const countryName = address.country || 'Unknown';
+						const countryFlag = getCountryFlag(countryCode);
+						
+						div.innerHTML = `
+							<div class="flex items-center justify-between">
+								<div class="flex-1">
+									<div class="font-semibold text-gray-800 text-lg flex items-center">
+										<span class="mr-2">${icon}</span>
+										<span>${displayCity}</span>
+										<span class="text-sm ml-2 text-gray-500">${countryFlag} ${countryName}</span>
+									</div>
+									<div class="text-sm text-gray-500">${subtitle}</div>
+								</div>
+								<div class="ml-4">
+									<span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">${countryCode}</span>
+								</div>
+							</div>
+						`;
+						
+						div.addEventListener('click', () => {
+							cityInput.value = actualCity;
+							countryCodeInput.value = countryCode;
+							autocompleteResults.classList.add('hidden');
+							
+							// Add visual feedback
+							countryCodeInput.classList.add('bg-green-100', 'border-green-500');
+							cityInput.classList.add('bg-green-100', 'border-green-500');
+							setTimeout(() => {
+								countryCodeInput.classList.remove('bg-green-100', 'border-green-500');
+								cityInput.classList.remove('bg-green-100', 'border-green-500');
+							}, 1000);
+						});
+						
+						autocompleteResults.appendChild(div);
+					});
+				}
+
+				// Get country flag emoji
+				function getCountryFlag(countryCode) {
+					const flags = {
+						'PL': '🇵🇱', 'ES': '🇪🇸', 'FR': '🇫🇷', 'DE': '🇩🇪', 'US': '🇺🇸', 
+						'GB': '🇬🇧', 'IT': '🇮🇹', 'PT': '🇵🇹', 'NL': '🇳🇱', 'BE': '🇧🇪',
+						'CH': '🇨🇭', 'AT': '🇦🇹', 'CZ': '🇨🇿', 'SK': '🇸🇰', 'UA': '🇺🇦',
+						'RU': '🇷🇺', 'SE': '🇸🇪', 'NO': '🇳🇴', 'DK': '🇩🇰', 'FI': '🇫🇮',
+					};
+					return flags[countryCode] || '🌍';
+				}
+
+				// Hide autocomplete when clicking outside
+				document.addEventListener('click', function(e) {
+					if (!cityInput.contains(e.target) && !autocompleteResults.contains(e.target)) {
+						autocompleteResults.classList.add('hidden');
+					}
+				});
+
+				// Form submit
+				document.getElementById('weatherSearchForm').addEventListener('submit', function(e) {
+					e.preventDefault();
+					const countryCode = countryCodeInput.value.toUpperCase();
+					const cityName = cityInput.value;
+					
+					if (countryCode && cityName) {
+						window.location.href = `/weather/${countryCode}/${cityName}`;
+					}
+				});
+			</script>
 		</div>
-	</main>
-</div>
-{% endblock %}
 
-{% block title %}Welcome to the Weather Forecast System!
+		{# System Description #}
+		<div class="max-w-5xl mx-auto mb-16">
+			<div class="bg-white rounded-2xl shadow-2xl p-10">
+				<h2 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+					<span class="text-4xl mr-3">ℹ️</span>
+					O systemie
+				</h2>
+				<p class="text-gray-700 leading-relaxed text-lg mb-4">
+					Any Weather to zaawansowany system prognozy pogody oparty o wiodące źródła danych meteorologicznych i geograficznych. 
+					System wykorzystuje technologie open-source do dostarczania dokładnych i aktualnych informacji o warunkach atmosferycznych 
+					dla miast i miejscowości na całym świecie.
+				</p>
+			</div>
+		</div>
+
+		{# Technologies Grid #}
+		<div class="max-w-6xl mx-auto">
+			<h2 class="text-4xl font-bold text-center text-gray-800 mb-10">🔧 Technologie</h2>
+			
+			<div class="grid md:grid-cols-2 gap-8 mb-12">
+				{# Nominatim #}
+				<div class="bg-white rounded-xl shadow-lg p-8 hover:shadow-2xl transition-shadow duration-300 border-t-4 border-green-500">
+					<div class="flex items-center mb-4">
+						<div class="text-5xl mr-4">🗺️</div>
+						<h3 class="text-2xl font-bold text-gray-800">OpenStreetMap Nominatim</h3>
+					</div>
+					<p class="text-gray-700 leading-relaxed mb-4">
+						Globalny system geokodowania wykorzystujący dane z OpenStreetMap. Służy do weryfikacji i lokalizacji miast, 
+						wsi oraz innych miejscowości na całym świecie. Dla Polski zapewnia szczególnie dokładną walidację, 
+						rozpoznając nie tylko miasta, ale także dzielnice, wsie, a nawet ulice.
+					</p>
+					<div class="flex items-center text-sm text-gray-500">
+						<span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+						Bezpłatny dostęp | Dane społeczności
+					</div>
+				</div>
+
+				{# Open-Meteo #}
+				<div class="bg-white rounded-xl shadow-lg p-8 hover:shadow-2xl transition-shadow duration-300 border-t-4 border-blue-500">
+					<div class="flex items-center mb-4">
+						<div class="text-5xl mr-4">🌦️</div>
+						<h3 class="text-2xl font-bold text-gray-800">Open-Meteo</h3>
+					</div>
+					<p class="text-gray-700 leading-relaxed mb-4">
+						Nowoczesna platforma danych meteorologicznych agregująca informacje z narodowych służb pogodowych. 
+						Dostarcza aktualne informacje o temperaturze, wilgotności, wietrze, ciśnieniu i zachmurzeniu. 
+						Dane są odświeżane co 15 minut, zapewniając precyzyjne prognozy dla każdej lokalizacji na Ziemi.
+					</p>
+					<div class="flex items-center text-sm text-gray-500">
+						<span class="inline-block w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+						Bezpłatny dostęp | Dane profesjonalne
+					</div>
+				</div>
+
+				{# Symfony #}
+				<div class="bg-white rounded-xl shadow-lg p-8 hover:shadow-2xl transition-shadow duration-300 border-t-4 border-purple-500">
+					<div class="flex items-center mb-4">
+						<div class="text-5xl mr-4">⚙️</div>
+						<h3 class="text-2xl font-bold text-gray-800">Symfony 6.4</h3>
+					</div>
+					<p class="text-gray-700 leading-relaxed mb-4">
+						Framework PHP wykorzystany do budowy backendu aplikacji. Zapewnia solidną architekturę, 
+						routing, walidację oraz obsługę HTTP. Asset Mapper pozwala na nowoczesne zarządzanie zasobami 
+						bez potrzeby ciężkich bundlerów.
+					</p>
+					<div class="flex items-center text-sm text-gray-500">
+						<span class="inline-block w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+						Framework PHP | Enterprise-grade
+					</div>
+				</div>
+
+				{# Tailwind CSS #}
+				<div class="bg-white rounded-xl shadow-lg p-8 hover:shadow-2xl transition-shadow duration-300 border-t-4 border-cyan-500">
+					<div class="flex items-center mb-4">
+						<div class="text-5xl mr-4">🎨</div>
+						<h3 class="text-2xl font-bold text-gray-800">Tailwind CSS</h3>
+					</div>
+					<p class="text-gray-700 leading-relaxed mb-4">
+						Utility-first CSS framework używany do stylowania interfejsu. Pozwala na szybkie tworzenie 
+						pięknych, responsywnych layoutów bez pisania własnego CSS. Wszystkie komponenty są w pełni 
+						responsywne i zoptymalizowane dla urządzeń mobilnych.
+					</p>
+					<div class="flex items-center text-sm text-gray-500">
+						<span class="inline-block w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>
+						CSS Framework | Modern design
+					</div>
+				</div>
+			</div>
+
+			{# Features #}
+			<div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-2xl p-10 text-white mb-12">
+				<h2 class="text-3xl font-bold mb-8 text-center">✨ Funkcje systemu</h2>
+				<div class="grid md:grid-cols-3 gap-6">
+					<div class="text-center">
+						<div class="text-5xl mb-3">🇵🇱</div>
+						<h3 class="text-xl font-semibold mb-2">Walidacja Polski</h3>
+						<p class="text-blue-100">Ścisła weryfikacja polskich miast, wsi i województw</p>
+					</div>
+					<div class="text-center">
+						<div class="text-5xl mb-3">🌍</div>
+						<h3 class="text-xl font-semibold mb-2">Globalne dane</h3>
+						<p class="text-blue-100">Obsługa wszystkich krajów i miast na świecie</p>
+					</div>
+					<div class="text-center">
+						<div class="text-5xl mb-3">⚡</div>
+						<h3 class="text-xl font-semibold mb-2">Real-time</h3>
+						<p class="text-blue-100">Aktualne dane pogodowe odświeżane co 15 minut</p>
+					</div>
+				</div>
+			</div>
+
+			{# Quick Links #}
+			<div class="bg-white rounded-2xl shadow-xl p-10">
+				<h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">🚀 Szybki start</h2>
+				<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+					<a href="/weather/PL/Warszawa" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-4 rounded-lg text-center font-semibold hover:from-red-600 hover:to-red-700 transform transition-all duration-200 hover:scale-105">
+						🇵🇱 Warszawa
+					</a>
+					<a href="/weather/PL/Kraków" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-4 rounded-lg text-center font-semibold hover:from-red-600 hover:to-red-700 transform transition-all duration-200 hover:scale-105">
+						🇵🇱 Kraków
+					</a>
+					<a href="/weather/PL/Gdańsk" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-4 rounded-lg text-center font-semibold hover:from-red-600 hover:to-red-700 transform transition-all duration-200 hover:scale-105">
+						🇵🇱 Gdańsk
+					</a>
+					<a href="/weather/ES/Barcelona" class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white px-6 py-4 rounded-lg text-center font-semibold hover:from-yellow-600 hover:to-yellow-700 transform transition-all duration-200 hover:scale-105">
+						🇪🇸 Barcelona
+					</a>
+					<a href="/weather/FR/Paris" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-4 rounded-lg text-center font-semibold hover:from-blue-600 hover:to-blue-700 transform transition-all duration-200 hover:scale-105">
+						🇫🇷 Paris
+					</a>
+					<a href="/weather/US/NewYork" class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-4 rounded-lg text-center font-semibold hover:from-indigo-600 hover:to-indigo-700 transform transition-all duration-200 hover:scale-105">
+						🇺🇸 New York
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}

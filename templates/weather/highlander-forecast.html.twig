@@ -1,12 +1,192 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Weather Forecast - {{city_name}}{% endblock %}
+
 {% block body %}
+	<div class="max-w-7xl mx-auto px-4 py-8">
+		{# Big Back Button - Left Side #}
+		<div class="mb-8">
+			<a href="/" 
+			   class="inline-flex items-center bg-gradient-to-r from-gray-600 to-gray-700 text-white px-6 py-3 rounded-full font-semibold hover:from-gray-700 hover:to-gray-800 transform transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl">
+				<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+				</svg>
+				Powrót do strony głównej
+			</a>
+		</div>
 
-	<h1 style="font-size: 4em;">
-		{{country_code}}: {{city_name}}
-	</h1>
+		{# Main Searched City - Big Widget on Top #}
+		<div class="mb-12">
+			<h1 class="text-5xl font-bold text-gray-800 mb-8 text-center">🔍 Wyszukane miasto</h1>
+			
+			{% if weather_data[0] is defined %}
+			{% set main_weather = weather_data[0] %}
+			<div class="max-w-2xl mx-auto bg-gradient-to-br 
+				{% if main_weather.icon == 'sun' %}from-yellow-400 to-orange-500
+				{% elseif main_weather.icon == 'rain' %}from-blue-400 to-blue-600
+				{% elseif main_weather.icon == 'haze' %}from-gray-400 to-gray-600
+				{% endif %} 
+				rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 hover:scale-105">
+				
+				<div class="p-10 text-white">
+					<div class="text-center mb-6">
+						<h2 class="text-4xl font-bold mb-2">{{ main_weather.city }}</h2>
+						<p class="text-xl opacity-90">{{country_code}} • 📅 {{ main_weather.datetime }}</p>
+					</div>
+					
+					<div class="text-center mb-8">
+						<div class="text-9xl mb-4">
+							{% if main_weather.icon == 'sun' %}☀️
+							{% elseif main_weather.icon == 'rain' %}🌧️
+							{% elseif main_weather.icon == 'haze' %}🌫️
+							{% endif %}
+						</div>
+						<div class="text-7xl font-bold mb-2">{{ main_weather.temperature }}°C</div>
+						<p class="text-2xl opacity-90">Odczuwalna: {{ main_weather.feels_like }}°C</p>
+					</div>
+					
+					<div class="grid grid-cols-2 gap-4 bg-white/20 backdrop-blur rounded-xl p-6">
+						<div class="text-center">
+							<div class="text-3xl mb-1">💨</div>
+							<div class="text-2xl font-semibold">{{ main_weather.wind }} km/h</div>
+							<div class="text-sm opacity-90">Wiatr {{ main_weather.wind_direction }}</div>
+						</div>
+						<div class="text-center">
+							<div class="text-3xl mb-1">💧</div>
+							<div class="text-2xl font-semibold">{{ main_weather.humidity }}%</div>
+							<div class="text-sm opacity-90">Wilgotność</div>
+						</div>
+						<div class="text-center">
+							<div class="text-3xl mb-1">☁️</div>
+							<div class="text-2xl font-semibold">{{ main_weather.cloudiness }}%</div>
+							<div class="text-sm opacity-90">Zachmurzenie</div>
+						</div>
+						<div class="text-center">
+							<div class="text-3xl mb-1">🎚️</div>
+							<div class="text-2xl font-semibold">{{ main_weather.pressure }}</div>
+							<div class="text-sm opacity-90">Ciśnienie hPa</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
+		</div>
 
-{% endblock %}
+		{# Other Cities - Comparison List Below #}
+		<div class="mb-12">
+			<h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">📊 Inne miasta (porównanie)</h2>
+		<div class="overflow-x-auto mb-12 shadow-lg rounded-lg">
+			<table class="min-w-full bg-white border border-gray-200">
+				<thead class="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+					<tr>
+						<th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">City</th>
+						<th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Date & Time</th>
+						<th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Temperature</th>
+						<th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Feels Like</th>
+						<th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Pressure</th>
+						<th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Humidity</th>
+						<th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Wind</th>
+						<th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Clouds</th>
+						<th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider">Condition</th>
+					</tr>
+				</thead>
+				<tbody class="divide-y divide-gray-200">
+					{% for weather in weather_data %}
+						{% if loop.index > 1 %}
+						<tr class="hover:bg-blue-50 transition-colors">
+							<td class="px-6 py-4 whitespace-nowrap">
+								<span class="font-semibold text-gray-900">{{ weather.city }}</span>
+							</td>
+							<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ weather.datetime }}</td>
+							<td class="px-6 py-4 whitespace-nowrap">
+								<span class="text-xl font-bold text-orange-600">{{ weather.temperature }}°C</span>
+							</td>
+							<td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ weather.feels_like }}°C</td>
+							<td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ weather.pressure }} hPa</td>
+							<td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ weather.humidity }}%</td>
+							<td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ weather.wind }} km/h {{ weather.wind_direction }}</td>
+							<td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ weather.cloudiness }}%</td>
+							<td class="px-6 py-4 whitespace-nowrap">
+								{% if weather.icon == 'sun' %}
+									<span class="text-2xl">☀️</span> <span class="text-yellow-600 font-medium">Sunny</span>
+								{% elseif weather.icon == 'rain' %}
+									<span class="text-2xl">🌧️</span> <span class="text-blue-600 font-medium">Rain</span>
+								{% elseif weather.icon == 'haze' %}
+									<span class="text-2xl">🌫️</span> <span class="text-gray-600 font-medium">Haze</span>
+								{% endif %}
+							</td>
+						</tr>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 
-{% block title %} Country by code and city name
+		{# Card View - Only for other 4 cities #}
+		<div class="mt-8">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+				{% for weather in weather_data %}
+					{% if loop.index > 1 %}
+					<div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+						<div class="bg-gradient-to-br 
+							{% if weather.icon == 'sun' %}from-yellow-400 to-orange-500
+							{% elseif weather.icon == 'rain' %}from-blue-400 to-blue-600
+							{% elseif weather.icon == 'haze' %}from-gray-400 to-gray-600
+							{% endif %} 
+							p-6 text-white">
+							<h3 class="text-2xl font-bold mb-2">{{ weather.city }}</h3>
+							<p class="text-sm opacity-90">📅 {{ weather.datetime }}</p>
+							<div class="text-7xl my-4 text-center">
+								{% if weather.icon == 'sun' %}
+									☀️
+								{% elseif weather.icon == 'rain' %}
+									🌧️
+								{% elseif weather.icon == 'haze' %}
+									🌫️
+								{% endif %}
+							</div>
+							<div class="text-center">
+								<div class="text-5xl font-bold">{{ weather.temperature }}°C</div>
+								<p class="text-lg opacity-90 mt-2">Feels like {{ weather.feels_like }}°C</p>
+							</div>
+						</div>
+						<div class="p-6 bg-white">
+							<ul class="space-y-3">
+								<li class="flex items-center justify-between text-gray-700">
+									<span class="flex items-center">
+										<span class="text-xl mr-2">💨</span>
+										<span class="font-medium">Wind</span>
+									</span>
+									<span class="font-semibold">{{ weather.wind }} km/h {{ weather.wind_direction }}</span>
+								</li>
+								<li class="flex items-center justify-between text-gray-700">
+									<span class="flex items-center">
+										<span class="text-xl mr-2">💧</span>
+										<span class="font-medium">Humidity</span>
+									</span>
+									<span class="font-semibold">{{ weather.humidity }}%</span>
+								</li>
+								<li class="flex items-center justify-between text-gray-700">
+									<span class="flex items-center">
+										<span class="text-xl mr-2">☁️</span>
+										<span class="font-medium">Clouds</span>
+									</span>
+									<span class="font-semibold">{{ weather.cloudiness }}%</span>
+								</li>
+								<li class="flex items-center justify-between text-gray-700">
+									<span class="flex items-center">
+										<span class="text-xl mr-2">🎚️</span>
+										<span class="font-medium">Pressure</span>
+									</span>
+									<span class="font-semibold">{{ weather.pressure }} hPa</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+		</div>
+	</div>
 {% endblock %}
